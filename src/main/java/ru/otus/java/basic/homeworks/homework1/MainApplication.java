@@ -61,10 +61,10 @@ public class MainApplication {
     }
 
     public static void selectColor() {
-        int data = 21;
+        int data = 19;
         if (data <= 10) {
             System.out.println("Красный");
-        } else if (data >= 10 && data <= 20) {
+        } else if (data <= 20) {
             System.out.println("Жёлтый");
         } else {
             System.out.println("Зелёный");
