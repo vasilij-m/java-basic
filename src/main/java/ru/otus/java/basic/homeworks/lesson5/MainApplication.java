@@ -29,9 +29,9 @@ public class MainApplication {
          * элементы, значение которых больше 5, и печатает полученную сумму в консоль
          */
         int sum = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > 5) {
-                sum += array[i];
+        for (int item : array) {
+            if (item > 5) {
+                sum += item;
             }
         }
         System.out.println(sum);
@@ -42,9 +42,7 @@ public class MainApplication {
          * метод принимает в качестве аргументов целое число и ссылку на целочисленный
          * массив и заполнет каждую ячейку массива указанным числом
          */
-        for (int i = 0; i < array.length; i++) {
-            array[i] = n;
-        }
+        Arrays.fill(array, n);
     }
 
     public static void increaseArrayItems(int n, int[] array) {

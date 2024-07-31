@@ -12,14 +12,12 @@ public class ArrayOrderChecker {
          * переменные в методе:
          * int arrayLength - длинна массива
          */
-        int arrayLength;
-
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите длину массива: ");
-        arrayLength = scanner.nextInt();
+        System.out.println("Введите длину массива:");
+        int arrayLength = scanner.nextInt();
         int[] array = new int[arrayLength];
-            System.out.println("Введите элементы массива:");
-            for (int i = 0; i < arrayLength; i++) {
+        System.out.println("Введите элементы массива:");
+        for (int i = 0; i < arrayLength; i++) {
             array[i] = scanner.nextInt();
         }
         return array;
@@ -37,10 +35,6 @@ public class ArrayOrderChecker {
          * String stringOrderForResult - подстрока для отображения в строке ответа (убывания или возрастания)
          */
         int itemsOrder;
-        String order;
-        String stringOrderForResult;
-
-        // запрашиваем порядок следования элементов массива для проверки
         Scanner scanner = new Scanner(System.in);
         do {
             System.out.println("""
@@ -50,22 +44,14 @@ public class ArrayOrderChecker {
             itemsOrder = scanner.nextInt();
         } while (itemsOrder < 1 || itemsOrder > 2);
 
-        // инициализируем переменные order и stringOrderForResult соответствующими значениями
-        if (itemsOrder == 1) {
-            order = "desc";
-            stringOrderForResult = "убывания";
-        } else {
-            order = "asc";
-            stringOrderForResult = "возрастания";
-        }
+        String order = itemsOrder == 1 ? "desc" : "asc";
+        String stringOrderForResult = itemsOrder == 1 ? "убывания" : "возрастания";
 
-        // подготавливаем строку для возврата из метода в качестве ответа
         String negativeResult = String.format("Элементы массива %s НЕ идут в порядке %s",
                 Arrays.toString(array), stringOrderForResult);
         String positiveResult = String.format("Элементы массива %s идут в порядке %s",
                 Arrays.toString(array), stringOrderForResult);
 
-        // проверяем, что элементы массива следуют в запрошенном порядке и возвращаем результат
         if (order.equals("desc")) {
             for (int i = 0; i < array.length - 1; i++) {
                 if (array[i] <= array[i+1]) {
