@@ -1,5 +1,9 @@
 package ru.otus.java.basic.homeworks.lesson11;
 
+import ru.otus.java.basic.homeworks.lesson11.animals.Cat;
+import ru.otus.java.basic.homeworks.lesson11.animals.Dog;
+import ru.otus.java.basic.homeworks.lesson11.animals.Horse;
+
 public class Main {
 
     public static void main(String[] args) {

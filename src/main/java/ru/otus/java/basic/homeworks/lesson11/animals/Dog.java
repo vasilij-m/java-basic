@@ -1,4 +1,4 @@
-package ru.otus.java.basic.homeworks.lesson11;
+package ru.otus.java.basic.homeworks.lesson11.animals;
 
 public class Dog extends Animal {
 

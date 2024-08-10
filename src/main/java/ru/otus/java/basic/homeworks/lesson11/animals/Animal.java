@@ -1,4 +1,4 @@
-package ru.otus.java.basic.homeworks.lesson11;
+package ru.otus.java.basic.homeworks.lesson11.animals;
 
 public class Animal {
     /** Имя животного */
@@ -40,25 +40,25 @@ public class Animal {
      * @param distance расстояние, которое нужно преодолеть
      * @return время, за которое расстояние было преоделено, либо -1 в случае недостатка единиц выносливости
      */
-    protected float run(int distance) {
+    public float run(int distance) {
         if (isTired) {
             System.out.printf("%s %s устал(а) и не может бежать\n", this.getClass().getSimpleName(), name);
             return -1;
         }
-        float[] movementResult = move(distance, staminaRunRatioPerMeter, speedRun);
-        if (movementResult[0] == 0) {
+        MovementResult movementResult = move(distance, staminaRunRatioPerMeter, speedRun);
+        if (movementResult.getDistance() == 0) {
             System.out.printf("На дистанцию %d метров не хватает выносливаости.\n", distance);
             return -1;
         }
-        if (movementResult[0] < distance) {
+        if (movementResult.getDistance() < distance) {
             System.out.printf("%s %s пробежал(а) %d метров за %.1f секунд. " +
                             "На всю дистанцию %d метров не хватает выносливости.\n",
-                    this.getClass().getSimpleName(), name, (int) movementResult[0], movementResult[1], distance);
+                    this.getClass().getSimpleName(), name, movementResult.getDistance(), movementResult.getTime(), distance);
             return -1;
         }
-        System.out.printf("%s %s пробежал(а) %.1f метров за %.1f секунд\n",
-                this.getClass().getSimpleName(), name, movementResult[0], movementResult[1]);
-        return movementResult[1];
+        System.out.printf("%s %s пробежал(а) %d метров за %.1f секунд\n",
+                this.getClass().getSimpleName(), name, movementResult.getDistance(), movementResult.getTime());
+        return movementResult.getTime();
     }
 
     /**
@@ -67,7 +67,7 @@ public class Animal {
      * @param distance расстояние, которое нужно преодолеть
      * @return время, за которое расстояние было преоделено, либо -1 в случае недостатка единиц выносливости
      */
-    protected float swim(int distance) {
+    public float swim(int distance) {
         if (!canSwim) {
             System.out.printf("%s %s не умеет плавать\n", this.getClass().getSimpleName(), name);
             return -1;
@@ -76,20 +76,21 @@ public class Animal {
             System.out.printf("%s %s устал(а) и не может плыть\n", this.getClass().getSimpleName(), name);
             return -1;
         }
-        float[] movementResult = move(distance, staminaSwimRatioPerMeter, speedSwim);
-        if (movementResult[0] == 0) {
+        MovementResult movementResult = move(distance, staminaSwimRatioPerMeter, speedSwim);
+        if (movementResult.getDistance() == 0) {
             System.out.printf("На дистанцию %d метров не хватает выносливаости.\n", distance);
             return -1;
         }
-        if (movementResult[0] < distance) {
+        if (movementResult.getDistance() < distance) {
             System.out.printf("%s %s проплыл(а) %d метров за %.1f секунд. " +
                             "На всю дистанцию %d метров не хватает выносливаости.\n",
-                    this.getClass().getSimpleName(), name, (int) movementResult[0], movementResult[1], distance);
+                    this.getClass().getSimpleName(), name, movementResult.getDistance(), movementResult.getTime(),
+                    distance);
             return -1;
         }
-        System.out.printf("%s %s проплыл(а) %.1f метров за %.1f секунд\n",
-                this.getClass().getSimpleName(), name, movementResult[0], movementResult[1]);
-        return movementResult[1];
+        System.out.printf("%s %s проплыл(а) %d метров за %.1f секунд\n",
+                this.getClass().getSimpleName(), name, movementResult.getDistance(), movementResult.getTime());
+        return movementResult.getTime();
     }
 
     /**
@@ -98,28 +99,28 @@ public class Animal {
      * @param distance расстояние, которое нужно преодолеть
      * @param staminaRatioPerMeter кол-во елиниц выносливости на 1 метр
      * @param speed скорость
-     * @return массив, в котором первый элемент - преодоленное расстояние,
-     * второй элемент - время, за которое расстояние было преоделено, либо -1 в случае недостатка единиц выносливости
+     * @return объект MovementResult, в котором поле distance - преодоленное расстояние,
+     * поле time - время, за которое расстояние было преоделено, либо -1 в случае недостатка единиц выносливости
      */
-    protected float[] move(int distance, int staminaRatioPerMeter, float speed) {
+    protected MovementResult move(int distance, int staminaRatioPerMeter, float speed) {
         int requiredStamina = distance * staminaRatioPerMeter;
         if (requiredStamina <= stamina) {
             float time = distance / speed;
             stamina -= requiredStamina;
             if (stamina <= 0) isTired = true;
-            return new float[] {distance, time};
+            return new MovementResult(distance, time);
         }
         int distanceCovered = stamina / staminaRatioPerMeter;
         if (distanceCovered == 0) {
-            return new float[] {0, -1};
+            return new MovementResult(0, -1);
         }
         float time = distanceCovered / speed;
         stamina -= distanceCovered * staminaRatioPerMeter;
         if (stamina <= 0) isTired = true;
-        return new float[] {distanceCovered, time};
+        return new MovementResult(distanceCovered, time);
     }
 
-    protected void info() {
+    public void info() {
         System.out.printf("""
                 Состояние %s %s:
                 Выносливость: %d
