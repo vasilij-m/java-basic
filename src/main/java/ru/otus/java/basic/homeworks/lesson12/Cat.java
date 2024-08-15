@@ -14,7 +14,7 @@ public class Cat {
 
     public void eat(Plate plate) {
         System.out.printf("Кот %s собирается поесть...\n", name);
-        if (!plate.hasFood(appetite)) {
+        if (!plate.takeFood(appetite)) {
             System.out.printf("Коту %s не хватает еды для насыщения\n", name);
             return;
         }
