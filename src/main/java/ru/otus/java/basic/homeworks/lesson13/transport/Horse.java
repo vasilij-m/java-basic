@@ -1,5 +1,6 @@
 package ru.otus.java.basic.homeworks.lesson13.transport;
 
+import ru.otus.java.basic.homeworks.lesson13.Human;
 import ru.otus.java.basic.homeworks.lesson13.TerrainTypes;
 
 public class Horse implements Movable {
@@ -9,11 +10,14 @@ public class Horse implements Movable {
     private final TerrainTypes[] terrainTypesAllowed;
     /** Тип транспортного средства */
     private final String transportType;
+    /** Текущий владелец транспортного средства */
+    private Human owner;
 
     public Horse(int stamina) {
         this.stamina = stamina;
         this.terrainTypesAllowed = new TerrainTypes[] { TerrainTypes.DENSE_FOREST, TerrainTypes.PLAIN };
         this.transportType = "Лошадь";
+        this.owner = null;
     }
 
     @Override
@@ -42,5 +46,10 @@ public class Horse implements Movable {
     @Override
     public int getResource() {
         return stamina;
+    }
+
+    @Override
+    public void setOwner(Human owner) {
+        this.owner = owner;
     }
 }

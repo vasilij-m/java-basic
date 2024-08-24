@@ -12,7 +12,7 @@ public class Main {
         Car car = new Car(200);
         AllTerrainTransport jeep = new AllTerrainTransport(500);
         Horse horse = new Horse(100);
-        Bike bike = new Bike(human);
+        Bike bike = new Bike();
 
         System.out.println("============ ТЕСТ ПЕРЕДВИЖЕНИЯ НА МАШИНЕ ============\n");
         human.takeTransport(car);

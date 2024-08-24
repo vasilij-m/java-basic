@@ -44,6 +44,7 @@ public class Human implements Movable {
             return;
         }
         currentTransport = transport;
+        currentTransport.setOwner(this);
         System.out.println("Текущее транспортное средство: " + currentTransport.getTransportType() +
                 "\nТекущее количество бензина (выносливости): " + currentTransport.getResource());
     }
@@ -54,6 +55,7 @@ public class Human implements Movable {
             System.out.println("Человек не находится в транспортном средстве");
             return;
         }
+        currentTransport.setOwner(null);
         currentTransport = null;
     }
 
@@ -86,5 +88,10 @@ public class Human implements Movable {
     @Override
     public int getResource() {
         return stamina;
+    }
+
+    @Override
+    public void setOwner(Human owner) {
+        System.out.println("У человека нет владельца");
     }
 }

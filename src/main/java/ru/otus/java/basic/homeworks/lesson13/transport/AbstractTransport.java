@@ -1,5 +1,6 @@
 package ru.otus.java.basic.homeworks.lesson13.transport;
 
+import ru.otus.java.basic.homeworks.lesson13.Human;
 import ru.otus.java.basic.homeworks.lesson13.TerrainTypes;
 
 public abstract class AbstractTransport {
@@ -9,10 +10,13 @@ public abstract class AbstractTransport {
     protected final TerrainTypes[] terrainTypesAllowed;
     /** Тип транспортного средства */
     protected final String transportType;
+    /** Текущий владелец транспортного средства */
+    protected Human owner;
 
     public AbstractTransport(int gasoline, TerrainTypes[] terrainTypesAllowed, String transportType) {
         this.gasoline = gasoline;
         this.terrainTypesAllowed = terrainTypesAllowed;
         this.transportType = transportType;
+        this.owner = null;
     }
 }

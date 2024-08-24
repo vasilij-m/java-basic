@@ -1,5 +1,6 @@
 package ru.otus.java.basic.homeworks.lesson13.transport;
 
+import ru.otus.java.basic.homeworks.lesson13.Human;
 import ru.otus.java.basic.homeworks.lesson13.TerrainTypes;
 
 public class Car extends AbstractTransport implements Movable {
@@ -36,5 +37,10 @@ public class Car extends AbstractTransport implements Movable {
     @Override
     public int getResource() {
         return gasoline;
+    }
+
+    @Override
+    public void setOwner(Human owner) {
+        this.owner = owner;
     }
 }

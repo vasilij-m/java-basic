@@ -4,34 +4,34 @@ import ru.otus.java.basic.homeworks.lesson13.Human;
 import ru.otus.java.basic.homeworks.lesson13.TerrainTypes;
 
 public class Bike implements Movable {
-    /** Человек, использующий велосипед */
-    private Human human;
     /** Типы местности, по которым велосипед способен передвигаться */
     private final TerrainTypes[] terrainTypesAllowed;
     /** Тип транспортного средства */
     private final String transportType;
+    /** Текущий владелец транспортного средства */
+    private Human owner;
 
-    public Bike(Human human) {
-        this.human = human;
+    public Bike() {
         this.terrainTypesAllowed = new TerrainTypes[] { TerrainTypes.DENSE_FOREST, TerrainTypes.PLAIN };
         this.transportType = "Велосипед";
+        this.owner = null;
     }
 
     @Override
     public boolean move(int distance, TerrainTypes terrain) {
-        MovementResult movementResult = canMove(human.getStamina(), distance, terrain, terrainTypesAllowed);
+        MovementResult movementResult = canMove(owner.getStamina(), distance, terrain, terrainTypesAllowed);
         if (!movementResult.result) {
             System.out.println(movementResult.message);
             return false;
         }
-        human.setStamina(human.getStamina() - distance * terrain.getResourceRatePerKm());
+        owner.setStamina(owner.getStamina() - distance * terrain.getResourceRatePerKm());
         System.out.printf("""
             ---->
             Вид транспорта: %s
             %s
             Осталось выносливости: %d
             ---->
-            """, transportType, movementResult.message, human.getStamina());
+            """, transportType, movementResult.message, owner.getStamina());
         return true;
     }
 
@@ -42,6 +42,11 @@ public class Bike implements Movable {
 
     @Override
     public int getResource() {
-        return human.getStamina();
+        return owner.getStamina();
+    }
+
+    @Override
+    public void setOwner(Human owner) {
+        this.owner = owner;
     }
 }

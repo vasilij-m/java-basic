@@ -1,5 +1,6 @@
 package ru.otus.java.basic.homeworks.lesson13.transport;
 
+import ru.otus.java.basic.homeworks.lesson13.Human;
 import ru.otus.java.basic.homeworks.lesson13.TerrainTypes;
 
 import java.util.Arrays;
@@ -27,6 +28,11 @@ public interface Movable {
      * @return текущее количество бензина/выносливости
      */
     int getResource();
+
+    /**
+     * Устанавливает владельца транспортного средства
+     */
+    void setOwner(Human owner);
 
     /**
      * Расчет возможности передвижения и формирование информационного сообщения
