@@ -6,7 +6,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        ArrayList<Integer> list = getListFromRange(2, 10);
+        List<Integer> list = getListFromRange(2, 10);
         System.out.println(list);
 
         System.out.println(getListItemsSumMoreThan5(list));
@@ -36,8 +36,8 @@ public class Main {
         System.out.println(getYoungestEmployee(employees).getName());
     }
 
-    public static ArrayList<Integer> getListFromRange(int min, int max) {
-        ArrayList<Integer> list = new ArrayList<>();
+    public static List<Integer> getListFromRange(int min, int max) {
+        List<Integer> list = new ArrayList<>();
         for (int i = min; i <= max; i++) {
             list.add(i);
         }
@@ -93,6 +93,9 @@ public class Main {
     }
 
     public static Employee getYoungestEmployee(List<Employee> list) {
+        if (list.isEmpty()) {
+            return null;
+        }
         int minAge = list.get(0).getAge();
         int indexMinAge = 0;
         for (int i = 1; i < list.size(); i++) {
