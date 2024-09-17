@@ -7,13 +7,13 @@ public class Main {
         double[] array2 = new double[100_000_000];
 
         long time = System.currentTimeMillis();
-        fillArray(array1, 0, 100_000_000);
+        fillArray(array1, 0, array1.length);
         System.out.println("Время заполнения цикла в одном потоке: " + (System.currentTimeMillis() - time) + " мс");
 
-        Thread t0 = new Thread(() -> fillArray(array2, 0, 25_000_000));
-        Thread t1 = new Thread(() -> fillArray(array2, 25_000_000, 50_000_000));
-        Thread t2 = new Thread(() -> fillArray(array2, 50_000_000, 75_000_000));
-        Thread t3 = new Thread(() -> fillArray(array2, 75_000_000, 100_000_000));
+        Thread t0 = new Thread(() -> fillArray(array2, 0, array2.length / 4));
+        Thread t1 = new Thread(() -> fillArray(array2, array2.length / 4, array2.length / 2));
+        Thread t2 = new Thread(() -> fillArray(array2, array2.length / 2, array2.length - array2.length / 4));
+        Thread t3 = new Thread(() -> fillArray(array2, array2.length - array2.length / 4, array2.length));
 
         time = System.currentTimeMillis();
         t0.start();
