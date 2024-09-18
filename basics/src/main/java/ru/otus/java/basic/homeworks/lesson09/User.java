@@ -1,4 +1,4 @@
-package ru.otus.java.basic.homeworks.lesson9;
+package ru.otus.java.basic.homeworks.lesson09;
 
 public class User {
     private String name;

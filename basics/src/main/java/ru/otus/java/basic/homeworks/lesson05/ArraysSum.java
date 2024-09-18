@@ -1,4 +1,4 @@
-package ru.otus.java.basic.homeworks.lesson5;
+package ru.otus.java.basic.homeworks.lesson05;
 
 public class ArraysSum {
 

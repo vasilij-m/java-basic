@@ -1,4 +1,4 @@
-package ru.otus.java.basic.homeworks.lesson7;
+package ru.otus.java.basic.homeworks.lesson07;
 
 import java.util.Arrays;
 
