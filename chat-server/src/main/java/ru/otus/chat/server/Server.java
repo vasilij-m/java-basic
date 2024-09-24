@@ -10,10 +10,13 @@ import java.util.Set;
 public class Server {
     private final int port;
     private final Map<String, ClientHandler> clients;
+    private AuthenticationProvider authenticationProvider;
 
     public Server(int port) {
         this.port = port;
         clients = new HashMap<>();
+        authenticationProvider = new InMemoryAuthenticationProvider(this);
+        authenticationProvider.initialize();
     }
 
     public void start() {
@@ -30,6 +33,10 @@ public class Server {
 
     public Set<String> getClients() {
         return clients.keySet();
+    }
+
+    public AuthenticationProvider getAuthenticationProvider() {
+        return authenticationProvider;
     }
 
     public synchronized void subscribe(ClientHandler clientHandler) {
@@ -53,5 +60,13 @@ public class Server {
         } else {
             clients.get(recipient).sendMessage(message);
         }
+    }
+
+    public boolean isUsernameBusy(String username) {
+        return clients.containsKey(username);
+    }
+
+    public void kick(String username) {
+        clients.get(username).kick();
     }
 }
