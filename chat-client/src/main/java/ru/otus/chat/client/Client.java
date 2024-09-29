@@ -10,31 +10,27 @@ public class Client {
     private final Socket socket;
     private final DataInputStream in;
     private final DataOutputStream out;
+    private final Scanner scanner;
 
     public Client(String serverHost, int serverPort) throws IOException {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         socket = new Socket(serverHost, serverPort);
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
-
-        while (true) {
-            try {
-                if (registerUser(scanner)) {
-                    System.out.println("Successful registration");
-                    break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
         new Thread(() -> {
             try {
                 while (true) {
                     String message = in.readUTF();
                     if (message.startsWith("/")) {
-                        if (message.startsWith("/exitok")) {
+                        if (message.startsWith("/exitok") || message.startsWith("/kicked")) {
                             break;
+                        }
+                        if (message.startsWith("/authok ")) {
+                            System.out.println("Successful authentication with username: " + message.split(" ")[1]);
+                        }
+                        if (message.startsWith("/regok ")) {
+                            System.out.println("Successful registration with username: " + message.split(" ")[1]);
                         }
                     } else {
                         System.out.println(message);
@@ -49,24 +45,19 @@ public class Client {
 
         while (true) {
             String message = scanner.nextLine();
-            out.writeUTF(message);
+            try {
+                out.writeUTF(message);
+            } catch (IOException e) {
+                break;
+            }
             if (message.startsWith("/exit")) {
                 break;
             }
         }
     }
 
-    public boolean registerUser(Scanner scanner) throws IOException {
-        String message = in.readUTF();
-        System.out.print(message);
-        String username = scanner.nextLine();
-        out.writeUTF(username);
-        String response = in.readUTF();
-        System.out.println(response);
-        return response.equals("/registerok");
-    }
-
     public void disconnect() {
+        System.out.println("Disconnecting from server...");
         try {
             in.close();
         } catch (IOException e) {
@@ -82,5 +73,6 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("Disconnected");
     }
 }
