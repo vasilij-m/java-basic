@@ -1,5 +1,9 @@
 package ru.otus.chat.server;
 
+import ru.otus.chat.server.authproviders.AuthenticationProvider;
+import ru.otus.chat.server.authproviders.DatabaseAuthenticationProvider;
+import ru.otus.chat.server.authproviders.InMemoryAuthenticationProvider;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,8 +19,15 @@ public class Server {
     public Server(int port) {
         this.port = port;
         clients = new HashMap<>();
-        authenticationProvider = new InMemoryAuthenticationProvider(this);
-        authenticationProvider.initialize();
+
+        try {
+            authenticationProvider = new DatabaseAuthenticationProvider(this);
+            authenticationProvider.initialize();
+        } catch (RuntimeException e) {
+            System.out.println("Initialization of the authentication service in database mode failed");
+            authenticationProvider = new InMemoryAuthenticationProvider(this);
+            authenticationProvider.initialize();
+        }
     }
 
     public void start() {

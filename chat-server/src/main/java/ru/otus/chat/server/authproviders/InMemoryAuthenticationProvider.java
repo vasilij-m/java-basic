@@ -1,41 +1,25 @@
-package ru.otus.chat.server;
+package ru.otus.chat.server.authproviders;
+
+import ru.otus.chat.server.ClientHandler;
+import ru.otus.chat.server.Server;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryAuthenticationProvider implements AuthenticationProvider {
-
-    private class User {
-        private String login;
-        private String password;
-        private String username;
-        private Role role;
-
-        public User(String login, String password, String username, Role role) {
-            this.login = login;
-            this.password = password;
-            this.username = username;
-            this.role = role;
-        }
-    }
-
-    private enum Role {
-        USER, ADMIN
-    }
-
-    private Server server;
+    private final Server server;
     private List<User> users;
 
     public InMemoryAuthenticationProvider(Server server) {
         this.server = server;
-        users = new ArrayList<>();
-        users.add(new User("login1", "pswd1", "user1", Role.USER));
-        users.add(new User("login2", "pswd2", "user2", Role.USER));
-        users.add(new User("login3", "admin", "admin", Role.ADMIN));
     }
 
     @Override
     public void initialize() {
+        users = new ArrayList<>();
+        users.add(new User("admin", "@dmin", "admin", Role.ADMIN));
+        users.add(new User("user1", "pswd1", "user1", Role.USER));
+        users.add(new User("user2", "pswd2", "user2", Role.USER));
         System.out.println("Authentication service started: In memory mode");
     }
 
@@ -71,7 +55,7 @@ public class InMemoryAuthenticationProvider implements AuthenticationProvider {
             clientHandler.sendMessage(String.format("User with username %s already exists", username));
             return false;
         }
-        users.add(new User(login, password, username, Role.USER));
+        addUserToChat(login, password, username);
         clientHandler.setUsername(username);
         server.subscribe(clientHandler);
         clientHandler.sendMessage("/regok " + username);
@@ -81,8 +65,8 @@ public class InMemoryAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean hasAdminRole(String username) {
         for (User user : users) {
-            if (user.username.equals(username)) {
-                return user.role == Role.ADMIN;
+            if (user.getUsername().equals(username)) {
+                return user.getRole() == Role.ADMIN;
             }
         }
         return false;
@@ -90,8 +74,8 @@ public class InMemoryAuthenticationProvider implements AuthenticationProvider {
 
     private String getUsernameByLoginAndPassword(String login, String password) {
         for (User user : users) {
-            if (user.login.equals(login) && user.password.equals(password)) {
-                return user.username;
+            if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
+                return user.getUsername();
             }
         }
         return null;
@@ -99,7 +83,7 @@ public class InMemoryAuthenticationProvider implements AuthenticationProvider {
 
     private boolean isLoginAlreadyExist(String login) {
         for (User user : users) {
-            if (user.login.equals(login)) {
+            if (user.getLogin().equals(login)) {
                 return true;
             }
         }
@@ -108,10 +92,14 @@ public class InMemoryAuthenticationProvider implements AuthenticationProvider {
 
     private boolean isUsernameAlreadyExist(String username) {
         for (User user : users) {
-            if (user.username.equals(username)) {
+            if (user.getUsername().equals(username)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private void addUserToChat(String login, String password, String username) {
+        users.add(new User(login, password, username, Role.USER));
     }
 }
