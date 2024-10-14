@@ -26,22 +26,20 @@ public class Main {
         int sequenceHits = 0;
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
-            int byteRead;
-            char symbol;
+            String line;
             int index = 0;
 
-            while ((byteRead = bufferedReader.read()) != -1) {
-                symbol = (char) byteRead;
-                if (symbol == '\n') continue;
-                if (symbol == symbols[index]) {
-                    if (index != symbols.length - 1) {
+            while ((line = bufferedReader.readLine()) != null) {
+                for (char symbol : line.toCharArray()) {
+                    if (symbol == symbols[index]) {
                         index++;
+                        if (index == symbols.length) {
+                            sequenceHits++;
+                            index = 0;
+                        }
                     } else {
-                        sequenceHits += 1;
                         index = 0;
                     }
-                } else {
-                    index = 0;
                 }
             }
         } catch (IOException e) {
