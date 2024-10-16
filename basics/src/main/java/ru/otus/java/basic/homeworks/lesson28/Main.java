@@ -4,8 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-    private static final Object mon = new Object();
-    private static final Letter letter = new Letter("C");
+    private static final Object MON = new Object();
+    private static final Letter LETTER = new Letter("C");
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -16,52 +16,52 @@ public class Main {
     }
 
     public static void printA() {
-        synchronized (mon) {
+        synchronized (MON) {
             try {
                 for (int i = 0; i < 5; i++) {
-                    while (!letter.getValue().equals("C")) {
-                        mon.wait();
+                    while (!LETTER.getValue().equals("C")) {
+                        MON.wait();
                     }
                     System.out.print("A");
-                    letter.setValue("A");
-                    mon.notifyAll();
+                    LETTER.setValue("A");
+                    MON.notifyAll();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     public static void printB() {
-        synchronized (mon) {
+        synchronized (MON) {
             try {
                 for (int i = 0; i < 5; i++) {
-                    while (!letter.getValue().equals("A")) {
-                        mon.wait();
+                    while (!LETTER.getValue().equals("A")) {
+                        MON.wait();
                     }
                     System.out.print("B");
-                    letter.setValue("B");
-                    mon.notifyAll();
+                    LETTER.setValue("B");
+                    MON.notifyAll();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     public static void printC() {
-        synchronized (mon) {
+        synchronized (MON) {
             try {
                 for (int i = 0; i < 5; i++) {
-                    while (!letter.getValue().equals("B")) {
-                        mon.wait();
+                    while (!LETTER.getValue().equals("B")) {
+                        MON.wait();
                     }
                     System.out.print("C");
-                    letter.setValue("C");
-                    mon.notifyAll();
+                    LETTER.setValue("C");
+                    MON.notifyAll();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
