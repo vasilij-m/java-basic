@@ -16,7 +16,7 @@ public class Main {
             }
             resultList.add(array[i]);
         }
-        if (!hasOneNumber) throw new RuntimeException("Входной массив не содержит единиц");
+        if (!hasOneNumber) throw new IllegalArgumentException("Входной массив не содержит единиц");
         int[] result = new int[resultList.size()];
         for (int i = 0; i < result.length; i++) {
             result[i] = resultList.get(resultList.size() - 1 - i);
