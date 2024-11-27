@@ -47,9 +47,12 @@ public class HttpServer {
              OutputStream outputStream = socket.getOutputStream()) {
             byte[] buffer = new byte[8192];
             int n = inputStream.read(buffer);
+            if (n < 1) {
+                return;
+            }
             String rawRequest = new String(buffer, 0, n);
             HttpRequest request = new HttpRequest(rawRequest);
-            request.info(true);
+            request.info();
             dispatcher.execute(request, outputStream);
         } catch (IOException e) {
             LOGGER.error("An exception occurred.", e);

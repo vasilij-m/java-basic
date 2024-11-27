@@ -14,6 +14,8 @@ public class HttpRequest {
     private HttpMethod method;
     private String uri;
     private Map<String, String> parameters;
+    private Map<String, String> headers;
+    private String body;
     private Exception exception;
 
     public HttpRequest(String rawRequest) {
@@ -25,8 +27,16 @@ public class HttpRequest {
         return uri;
     }
 
+    public String getRoutingKey() {
+        return method + " " + uri;
+    }
+
     public String getParameter(String key) {
         return parameters.get(key);
+    }
+
+    public String getBody() {
+        return body;
     }
 
     public Exception getException() {
@@ -46,6 +56,7 @@ public class HttpRequest {
         int endIndex = rawRequest.indexOf(' ', startIndex + 1);
         uri = rawRequest.substring(startIndex + 1, endIndex);
         method = HttpMethod.valueOf(rawRequest.substring(0, startIndex));
+
         parameters = new HashMap<>();
         if (uri.contains("?")) {
             String[] elements = uri.split("[?]");
@@ -56,11 +67,27 @@ public class HttpRequest {
                 parameters.put(keyValue[0], keyValue[1]);
             }
         }
+
+        headers = new HashMap<>();
+        startIndex = rawRequest.indexOf("\r\n") + 2;
+        endIndex = rawRequest.indexOf("\r\n\r\n");
+        String[] headersWithValues = rawRequest.substring(startIndex, endIndex).split("\r\n");
+        for (String o : headersWithValues) {
+            String[] headerValue = o.split(": ");
+            headers.put(headerValue[0], headerValue[1]);
+        }
+
+        if (method == HttpMethod.POST) {
+            body = rawRequest.substring(rawRequest.indexOf("\r\n\r\n") + 4);
+        }
     }
 
-    public void info(boolean debug) {
-        if (debug) {
-            LOGGER.debug("RAW REQUEST:\n{}",rawRequest);
-        }
+    public void info() {
+        LOGGER.debug("RAW REQUEST:\n{}",rawRequest);
+        LOGGER.info("Method: {}",method);
+        LOGGER.info("URI: {}",uri);
+        LOGGER.info("Parameters: {}",parameters);
+        LOGGER.info("Headers: {}",headers);
+        LOGGER.info("Body: {}",body);
     }
 }
